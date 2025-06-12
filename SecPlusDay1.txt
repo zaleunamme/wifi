@@ -1,0 +1,102 @@
+###############################################################
+T-pot CE:
+wget http://downloads.sourceforge.net/project/pentbox18realised/pentbox-1.8.tar.gz
+ls
+tar xvfz pentbox-1.8.tar.gz
+cd pentbox-1.8
+./pentbox.rb
+
+ PenTBox 1.8 
+         __
+        U00U|.'@@@@@@`.
+        |__|(@@@@@@@@@@)
+             (@@@@@@@@)
+             `YY~~~~YY'
+              ||    ||
+
+--------- Menu          ruby3.1.2 @ x86_64-linux-gnu
+
+1- Cryptography tools
+
+2- Network tools
+
+3- Web
+
+4- Ip grabber
+
+5- Geolocation ip
+
+6- Mass attack
+
+7- License and contact
+
+8- Exit
+
+   -> 
+ 2:  network tools -> 3. honeypot -> 1. autoconfig
+
+HoneyPot on ssh access:
+2 --> 22 
+
+
+
+#CONFIGURE SSH VIA REMOTE ON KALI:
+Step 1: Install the OpenSSH Server
+	sudo apt update
+
+    sudo apt install openssh-server
+	
+Step 2: Start the SSH Service
+
+	sudo systemctl start ssh
+	
+Step 3: Enable SSH to Start on Boot
+
+	sudo systemctl enable ssh
+	
+Step 4: Verify SSH is Running
+
+	sudo systemctl status ssh
+	
+KALI COMMANDS:
+
+1. ping -s 1300 -f 
+   sudo apt install iftop
+   sudo iftop
+   
+   ping 192.168.108.132 -s 1300 -f -i 0.002
+   
+2. apt install hping3
+
+	hping3 -S -V --flood 192.168.108.132
+	
+	hping3 --traceroute -V -1 192.168.108.132
+	
+	hping3 --traceroute -V -p 80 -S rivanit.com
+	
+	hping3 --traceroute -V -p 80 -S -A --baseport 1337 8.8.8.8
+	!this evades firewall rules.
+	
+3. apt install ptunnel	
+
+on Target: ptunnel
+
+on hacker:
+   ptunnel -p 192.168.108.131 -lp 8000 -da 192.168.108.131 -dp 22
+
+ apt install tcpdump
+
+   tcpdump -i any icmp
+   08:48:01.617950 lo    In  IP 192.168.108.131 > 192.168.108.131: ICMP echo request, id 55271, seq 63, length 36
+   08:48:01.617979 lo    In  IP 192.168.108.131 > 192.168.108.131: ICMP echo reply, id 55271, seq 63, length 36
+   08:48:01.618024 lo    In  IP 192.168.108.131 > 192.168.108.131: ICMP echo reply, id 55271
+   
+another term:  ssh -p 8000 kali@localhost
+
+4. NMAPS:  apt install nmap
+
+nmap -sn 50.6.160.0/24
+
+nmap -sV 50.6.160.246
+
+
