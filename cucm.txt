@@ -1,0 +1,442 @@
+CUCM-21#sh run
+Building configuration...
+
+
+Current configuration : 6818 bytes
+!
+! Last configuration change at 17:16:27 UTC Mon Jan 2 2006
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname CUCM-21
+!
+boot-start-marker
+boot-end-marker
+!
+!
+no logging console
+enable secret 5 $1$SGBx$foG/OWQg0cmN0f1vbKfB8.
+!
+no aaa new-model
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+crypto pki token default removal timeout 0
+!
+!
+dot11 syslog
+!
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+voice service voip
+ ip address trusted list
+  ipv4 0.0.0.0 0.0.0.0
+ allow-connections h323 to sip
+ allow-connections sip to h323
+ allow-connections sip to sip
+ supplementary-service h450.12
+ h323
+  call start slow
+ sip
+  bind control source-interface FastEthernet0/0
+  bind media source-interface FastEthernet0/0
+  registrar server expires max 600 min 60
+!
+!
+voice register global
+ mode cme
+ source-address 10.21.100.8 port 5060
+ max-dn 12
+ max-pool 12
+ authenticate register
+!
+voice register dn  1
+ number 2175
+ allow watch
+ name 2175
+!
+voice register dn  2
+ number 2176
+ allow watch
+ name 2176
+!
+voice register pool  1
+ id mac 98B7.1EBB.CDE5
+ number 1 dn 1
+ dtmf-relay sip-notify
+ username 2175 password 2175
+ codec g711ulaw
+!
+voice register pool  2
+ id mac 1869.D4E4.7147
+ number 1 dn 2
+ dtmf-relay sip-notify
+ username 2176 password 2176
+ codec g711ulaw
+!
+!
+!         
+!
+voice-card 0
+!
+!
+application
+ service rivanqueue flash:app-b-acd-3.0.0.2.tcl
+  param aa-hunt3 2101
+  param queue-len 15
+  param aa-hunt4 2133
+  param aa-hunt1 2100
+  param number-of-hunt-grps 4
+  param queue-manager-debugs 1
+  param aa-hunt2 2177
+ !
+ service rivanaa flash:app-b-acd-aa-3.0.0.2.tcl
+  paramspace english index 1
+  param number-of-hunt-grps 2
+  param dial-by-extension-option 8
+  param handoff-string rivanaa
+  param welcome-prompt flash:en21bacd21welcome.au
+  paramspace english language en
+  param call-retry-timer 15
+  param service-name rivanqueue
+  paramspace english location flash:
+  param second-greeting-time 60
+  param max-time-vm-retry 2
+  param max-time-call-retry 700
+  param voice-mail 1234
+  param aa-pilot 2169
+ !
+!
+!
+!
+license udi pid C1861E-SRST-C-F/K9 sn FTX155182H8
+license accept end user agreement
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!         
+!
+interface FastEthernet0/0
+ ip address 10.21.100.8 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface Integrated-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface FastEthernet0/1/0
+ no ip address
+!
+interface FastEthernet0/1/1
+ no ip address
+!
+interface FastEthernet0/1/2
+ no ip address
+!
+interface FastEthernet0/1/3
+ no ip address
+!
+interface FastEthernet0/1/4
+ no ip address
+!
+interface FastEthernet0/1/5
+ no ip address
+!
+interface FastEthernet0/1/6
+ no ip address
+!
+interface FastEthernet0/1/7
+ no ip address
+!
+interface FastEthernet0/1/8
+ no ip address
+!
+interface FastEthernet0/2/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/2/1
+ no ip address
+ shutdown 
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+!
+router ospf 1
+ router-id 10.21.100.8
+ network 10.21.100.0 0.0.0.255 area 0
+!
+router bgp 1000
+ bgp log-neighbor-changes
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+!
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+voice-port 0/0/0
+!
+voice-port 0/0/1
+!
+voice-port 0/0/2
+!
+voice-port 0/0/3
+!
+voice-port 0/1/0
+!
+voice-port 0/1/1
+!
+voice-port 0/1/2
+!
+voice-port 0/1/3
+!
+voice-port 0/4/0
+ auto-cut-through
+ signal immediate
+ input gain auto-control
+ description Music On Hold Port
+!
+!
+!
+mgcp profile default
+!
+!
+dial-peer voice 1 pots
+ destination-pattern 2100
+ port 0/0/0
+!
+dial-peer voice 2 pots
+ destination-pattern 2101
+ port 0/0/1
+!
+dial-peer voice 3 pots
+ destination-pattern 2102
+ port 0/0/2
+!
+dial-peer voice 4 pots
+ destination-pattern 2103
+ port 0/0/3
+!
+dial-peer voice 11 voip
+ destination-pattern 11..
+ session target ipv4:10.11.100.8
+ codec g711ulaw
+!
+dial-peer voice 12 voip
+ destination-pattern 12..
+ session target ipv4:10.12.100.8
+ codec g711ulaw
+!
+dial-peer voice 22 voip
+ destination-pattern 22..
+ session target ipv4:10.22.100.8
+ codec g711ulaw
+!
+dial-peer voice 31 voip
+ destination-pattern 31..
+ session target ipv4:10.31.100.8
+ codec g711ulaw
+!
+dial-peer voice 32 voip
+ destination-pattern 32..
+ session target ipv4:10.32.100.8
+ codec g711ulaw
+!
+dial-peer voice 41 voip
+ destination-pattern 41..
+ session target ipv4:10.41.100.8
+ codec g711ulaw
+!
+dial-peer voice 42 voip
+ destination-pattern 42..
+ session target ipv4:10.42.100.8
+ codec g711ulaw
+!
+dial-peer voice 51 voip
+ destination-pattern 51..
+ session target ipv4:10.51.100.8
+ codec g711ulaw
+!
+dial-peer voice 52 voip
+ destination-pattern 52..
+ session target ipv4:10.52.100.8
+ codec g711ulaw
+!
+dial-peer voice 61 voip
+ destination-pattern 61..
+ session target ipv4:10.61.100.8
+ codec g711ulaw
+!
+dial-peer voice 62 voip
+ destination-pattern 62..
+ session target ipv4:10.62.100.8
+ codec g711ulaw
+!
+dial-peer voice 71 voip
+ destination-pattern 71..
+ session target ipv4:10.71.100.8
+ codec g711ulaw
+!
+dial-peer voice 72 voip
+ destination-pattern 72..
+ session target ipv4:10.72.100.8
+ codec g711ulaw
+!
+dial-peer voice 81 voip
+ destination-pattern 81..
+ session target ipv4:10.81.100.8
+ codec g711ulaw
+!
+dial-peer voice 82 voip
+ destination-pattern 82..
+ session target ipv4:10.82.100.8
+ codec g711ulaw
+!
+dial-peer voice 69 voip
+ service rivanaa out-bound
+ destination-pattern 2169
+ session target ipv4:10.21.100.8
+ incoming called-number 2169
+ dtmf-relay h245-alphanumeric
+ codec g711ulaw
+ no vad
+!
+!
+!
+!
+telephony-service
+ no auto-reg-ephone
+ max-ephones 5
+ max-dn 20
+ ip source-address 10.21.100.8 port 2000
+ max-conferences 4 gain -6
+ moh "flash:/en21bacd21music21on21hold.au"
+ transfer-system full-consult
+ create cnf-files version-stamp 7960 Jan 02 2006 14:54:07
+!
+!
+ephone-dn  1
+ number 2111
+!
+!
+ephone-dn  2
+ number 2122
+!
+!
+ephone-dn  3
+ number 2133
+!
+!
+ephone-dn  4
+ number 2144
+!         
+!
+ephone-dn  5
+ number 2155
+!
+!
+ephone-dn  6
+ number 2166
+!
+!
+ephone-dn  7
+ number 2177
+!
+!
+ephone-dn  8
+ number 2188
+!
+!
+ephone-dn  9
+ number 2199
+!
+!
+ephone-dn  10
+ number 2198
+!
+!
+ephone  1
+ device-security-mode none
+ video
+ mac-address CCD8.C1FB.12FF
+ max-calls-per-button 3
+ busy-trigger-per-button 2
+ type 8945
+ button  1:8 2:7 3:6 4:5
+!
+!
+!
+ephone  2
+ device-security-mode none
+ video
+ mac-address CCD8.C1FB.1103
+ max-calls-per-button 3
+ busy-trigger-per-button 2
+ type 8945
+ button  1:4 2:3 3:2 4:1
+!
+!         
+!
+line con 0
+ exec-timeout 0 0
+ password 7 15020A1F17
+ login
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport input all
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+line vty 0 4
+ exec-timeout 0 0
+ password 7 140713181F
+ login
+ transport input all
+line vty 5 14
+ exec-timeout 0 0
+ password 7 140713181F
+ login
+ transport input all
+!
+end
